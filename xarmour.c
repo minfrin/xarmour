@@ -219,9 +219,9 @@ int main (int argc, char **argv)
 
                     setenv("XARMOUR_LABEL", blabel, 1);
 
-                    close(pipefd[WRITE_FD]); // Close unused write end
+                    close(pipefd[WRITE_FD]);
                     dup2(pipefd[READ_FD], STDIN_FILENO);
-                    close(pipefd[READ_FD]); // Not needed after dup2
+                    close(pipefd[READ_FD]);
 
                     execvp(argv[optind], argv + optind);
 
@@ -246,7 +246,9 @@ int main (int argc, char **argv)
 
             /* write the armour */
 
-            write(pipefd[WRITE_FD], buffer, strlen(buffer));
+            if (write(pipefd[WRITE_FD], buffer, strlen(buffer)) < 0) {
+                /* ignore write failures, we'll hear about it below */
+            }
 
             /* we are seeking the end of the armour */
 
