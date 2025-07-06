@@ -1,0 +1,36 @@
+# RPM Spec file for xarmour
+
+Name:      @PACKAGE_NAME@
+Version:   @PACKAGE_VERSION@
+Release:   1%{?dist}
+Summary:   Split armoured data and process each one
+License:   Apache-2.0
+
+URL:       https://github.com/minfrin/%{name}
+Source0:   %{URL}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+BuildRequires: clang
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+
+%description
+The xarmour command parses multiple armoured text blocks containing PEM encoded
+or PGP armoured data, and passes each one to the command specified.
+
+%prep
+%setup -q
+
+%build
+%configure
+%make_build
+
+%install
+%make_install
+
+%files
+%{_bindir}/xarmour
+%{_mandir}/man1/xarmour.1*
+
+%doc AUTHORS ChangeLog README
+%license COPYING
+
