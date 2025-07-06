@@ -6,7 +6,6 @@ AC_INIT(xarmour, 1.0.0, minfrin@sharp.fm)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE([dist-bzip2])
-LT_INIT
 AC_CONFIG_FILES([Makefile xarmour.spec])
 AC_CONFIG_SRCDIR([xarmour.c])
 AC_CONFIG_HEADERS([config.h])
