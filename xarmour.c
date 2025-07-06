@@ -197,6 +197,8 @@ int main (int argc, char **argv)
                     snprintf(buf, sizeof(buf), "%ld", times);
                     setenv("XARMOUR_TIMES", buf, 1);
 
+                    setenv("XARMOUR_LABEL", blabel, 1);
+
                     close(pipefd[WRITE_FD]); // Close unused write end
                     dup2(pipefd[READ_FD], STDIN_FILENO);
                     close(pipefd[READ_FD]); // Not needed after dup2
