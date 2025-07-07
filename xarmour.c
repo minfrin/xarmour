@@ -37,6 +37,7 @@
 
 static struct option long_options[] =
 {
+    {"file", required_argument, NULL, 'f'},
     {"times", required_argument, NULL, 't'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'v'},
@@ -73,6 +74,8 @@ static int help(const char *name, const char *msg, int code)
             "  All text outside the armoured text block is ignored.\n"
             "\n"
             "OPTIONS\n"
+            "  -f, --file f   Name of file to read containing armoured data. Defaults to\n"
+            "                 stdin.\n"
             "  -t, --times t  Number of times command must be successful for xarmour to\n"
             "                 return success. If unset, xarmour will give up on first\n"
             "                 failure.\n"
@@ -137,16 +140,30 @@ int main (int argc, char **argv)
     const char *begin = "-----BEGIN %1000[^-]-----";
     const char *end = "-----END %1000[^-]-----";
 
+    const char *file = NULL;
+    FILE *in = stdin;
+
     const char *name = argv[0];
     long int index = 0, count = 0, times = 0;
     int c, status = 0;
 
     pid_t f = -1, w;
 
-    while ((c = getopt_long(argc, argv, "t:hv", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:t:hv", long_options, NULL)) != -1) {
 
         switch (c)
         {
+        case 'f':
+            in = fopen(optarg, "r");
+
+            if (!in) {
+                fprintf(stderr, "%s: Could not open '%s': %s", name, optarg,
+                        strerror(errno));
+
+                return EXIT_FAILURE;
+            }
+
+            break;
         case 't':
             times = strtol(optarg, &optarg, 10);
 
@@ -173,7 +190,7 @@ int main (int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    while (fgets(buffer, sizeof(buffer), stdin)) {
+    while (fgets(buffer, sizeof(buffer), in)) {
 
         if (f < 0) {
 
