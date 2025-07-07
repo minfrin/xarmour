@@ -1,4 +1,8 @@
 
+Changes with v1.1.0
+
+  *) Add --file option. [Graham Leggett]
+
 Changes with v1.0.0
 
   *) Initial creation of the autotools. [Graham Leggett]
